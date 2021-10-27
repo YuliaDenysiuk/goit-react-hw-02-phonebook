@@ -16,7 +16,7 @@ class App extends Component {
     filter: '',
   };
 
-  formSubmitHandler = ({ name, number }) => {
+  handleFormSubmit = ({ name, number }) => {
     const { contacts } = this.state;
 
     const contact = {
@@ -25,14 +25,14 @@ class App extends Component {
       number,
     };
 
-    if (contacts.some(el => el.name === contact.name)) {
+    if (contacts.find(el => el.name === contact.name)) {
       return alert(`${name} is already in contacts`);
     }
 
     this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
   };
 
-  handlerFilterChange = ({ target }) => {
+  handleFilterChange = ({ target }) => {
     const { value } = target;
     this.setState({ filter: value });
   };
@@ -45,20 +45,26 @@ class App extends Component {
     );
   };
 
+  deleteContact = id => {
+     this.setState(({contacts}) => ({
+      contacts: contacts.filter(contact => contact.id !== id)
+    }));
+  };
+
   render() {
     const { filter } = this.state;
-    const { formSubmitHandler, handlerFilterChange, getFilteredContacts } =
+    const { handleFormSubmit, handleFilterChange, getFilteredContacts, deleteContact } =
       this;
     const filteredContacts = getFilteredContacts();
 
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={formSubmitHandler} />
+        <ContactForm onSubmit={handleFormSubmit} />
 
         <h2>Contacts</h2>
-        <Filter value={filter} handlerFilterChange={handlerFilterChange} />
-        <ContactList contacts={filteredContacts} />
+        <Filter value={filter} onFilterChange={handleFilterChange} />
+        <ContactList contacts={filteredContacts} onDeleteContact={deleteContact} />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import s from './ContactForm.module.css';
 
 const INITIAL_STATE = {
   name: '',
@@ -9,7 +10,7 @@ const INITIAL_STATE = {
 class ContactForm extends Component {
   state = { ...INITIAL_STATE };
 
-  handlerChange = ({ target }) => {
+  handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
   };
@@ -26,35 +27,37 @@ class ContactForm extends Component {
 
   render() {
     const { name, number } = this.state;
-    const { handlerChange, handleSubmit } = this;
+    const { handleChange, handleSubmit } = this;
 
     return (
-      <form onSubmit={handleSubmit}>
-        <label>
+      <form onSubmit={handleSubmit} className={s.form}>
+        <label className={s.form__label}>
           Name
           <input
             type="text"
+            className={s.form__input}
             name="name"
             value={name}
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
             required
-            onChange={handlerChange}
+            onChange={handleChange}
           />
         </label>
-        <label>
+        <label className={s.form__label}>
           Number
           <input
             type="tel"
+            className={s.form__input}
             name="number"
             value={number}
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
             required
-            onChange={handlerChange}
+            onChange={handleChange}
           />
         </label>
-        <button type="submit">Add contact</button>
+        <button type="submit" className={s.form__button}>Add contact</button>
       </form>
     );
   }
